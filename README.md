@@ -1,17 +1,16 @@
 Docker image for ISC DHCP server
 ================================
 
-[![](https://images.microbadger.com/badges/image/networkboot/dhcpd.svg)](https://microbadger.com/images/networkboot/dhcpd "See more networkboot/dhcpd image details")
+[![](https://images.microbadger.com/badges/image/microscotch/dhcpd-alpine.svg)](https://microbadger.com/images/microscotch/dhcpd-alpine "See more microscotch/dhcpd-alpine image details")
 
 This Docker image is suitable for running a DHCP server for your docker host
-network.  It uses ISC DHCP server which is bundled with the latest Ubuntu
-LTS distribution.
+network.  It uses ISC DHCP server which is bundled with the alpine distribution.
 
 How to build
 ============
 
  1. Install Docker with the instructions on <https://www.docker.com>.
- 2. Run `./build` to create the local docker image `networkboot/dhcpd`.
+ 2. Run `./build` to create the local docker image `microscotch/dhcpd-alpine`.
 
 How to use
 ==========
@@ -27,7 +26,7 @@ on.
     network interface.  If you need assistance, you can run
     `docker run -it --rm networkboot/dhcpd man dhcpd.conf` for a description
     of the configuration file syntax.
- 3. Run `docker run -it --rm --init --net host -v "$(pwd)/data":/data networkboot/dhcpd eth0`.
+ 3. Run `docker run -it --rm --init --net host -v "$(pwd)/data":/data microscotch/dhcpd eth0`.
     `dhcpd` will automatically start and display its logs on the console.
     You can press Ctrl-C to terminate the server.
 
@@ -53,7 +52,7 @@ Acknowledgements
 
 This image uses the following software components:
 
- * Ubuntu Linux distribution from <https://www.ubuntu.com>.
+ * Alpine distribution from <https://www.alpinelinux.org/>.
  * ISC DHCP server from <https://www.isc.org/downloads/dhcp/>.
  * Dumb-init from <https://github.com/Yelp/dumb-init>.
 

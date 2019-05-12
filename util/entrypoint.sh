@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e
+set -ex
 
 
 # Support docker run --init parameter which obsoletes the use of dumb-init,

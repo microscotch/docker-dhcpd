@@ -1,0 +1,9 @@
+FROM arm32v7/alpine:3.9
+
+ADD --chown=root:root https://github.com/multiarch/qemu-user-static/releases/download/v4.0.0/x86_64_qemu-arm-static.tar.gz /usr/bin/
+RUN apk update \
+ && apk add dhcp dhcp-doc perl dumb-init mdocml \
+ && rm /usr/bin/qemu-arm-static
+
+COPY util/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]

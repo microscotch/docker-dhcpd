@@ -1,0 +1,11 @@
+FROM i386/alpine:3.9
+
+COPY qemu-i386-static /usr/bin/
+
+RUN apk update \
+ && apk add dhcp dhcp-doc perl dumb-init mdocml \
+ && rm /usr/bin/qemu-arm-static
+
+COPY util/entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

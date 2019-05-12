@@ -24,9 +24,9 @@ on.
  1. Create `data` folder.
  2. Create `data/dhcpd.conf` with a subnet clause for the specified
     network interface.  If you need assistance, you can run
-    `docker run -it --rm networkboot/dhcpd man dhcpd.conf` for a description
+    `docker run -it --rm microscotch/dhcpd-alpine man dhcpd.conf` for a description
     of the configuration file syntax.
- 3. Run `docker run -it --rm --init --net host -v "$(pwd)/data":/data microscotch/dhcpd eth0`.
+ 3. Run `docker run -it --rm --init --net host -v "$(pwd)/data":/data microscotch/dhcpd-alpine eth0`.
     `dhcpd` will automatically start and display its logs on the console.
     You can press Ctrl-C to terminate the server.
 
@@ -56,10 +56,12 @@ This image uses the following software components:
  * ISC DHCP server from <https://www.isc.org/downloads/dhcp/>.
  * Dumb-init from <https://github.com/Yelp/dumb-init>.
 
+This image is based on work of Robin Smidsrød <robin@smidsrod.no>.
+
 Copyright & License
 ===================
 
-This project is copyright 2017 Robin Smidsrød <robin@smidsrod.no>.
+This project is copyright 2019 Microscotch <github.com@microscotch.net>
 
 It is licensed under the Apache 2.0 license.
 

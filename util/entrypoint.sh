@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 
 
 # Support docker run --init parameter which obsoletes the use of dumb-init,
@@ -49,20 +49,7 @@ if [ -n "$IFACE" ]; then
         exit 1
     fi
 
-    uid=$(stat -c%u "$data_dir")
-    gid=$(stat -c%g "$data_dir")
-    if [ $gid -ne 0 ]; then
-        groupmod -g $gid dhcpd
-    fi
-    if [ $uid -ne 0 ]; then
-        usermod -u $uid dhcpd
-    fi
-
     [ -e "$data_dir/dhcpd.leases" ] || touch "$data_dir/dhcpd.leases"
-    chown dhcpd:dhcpd "$data_dir/dhcpd.leases"
-    if [ -e "$data_dir/dhcpd.leases~" ]; then
-        chown dhcpd:dhcpd "$data_dir/dhcpd.leases~"
-    fi
 
     container_id=$(grep docker /proc/self/cgroup | sort -n | head -n 1 | cut -d: -f3 | cut -d/ -f3)
     if perl -e '($id,$name)=@ARGV;$short=substr $id,0,length $name;exit 1 if $name ne $short;exit 0' $container_id $HOSTNAME; then

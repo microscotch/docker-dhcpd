@@ -1,8 +1,15 @@
 #!/bin/bash
 
+BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | cut -d '.' -f 2)
+
+[ "${BUILD_ARCH}" != "Dockerfile" ] && \
+QEMU_USER_STATIC_ARCH=$([ "${BUILD_ARCH}" == "armhf" ] && echo "${BUILD_ARCH::-2}" || echo "${BUILD_ARCH}")
+
+
 docker build \
     --file "${DOCKERFILE_PATH}" \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
+    --build-arg QEMU_USER_STATIC_ARCH="${QEMU_USER_STATIC_ARCH}" \
     --tag "$IMAGE_NAME" \
 .

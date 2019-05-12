@@ -1,10 +1,12 @@
 FROM arm32v7/alpine:3.9
 
-COPY qemu-arm-static /usr/bin/
+ARG QEMU_USER_STATIC_ARCH
+
+COPY qemu-${QEMU_USER_STATIC_ARCH}-static /usr/bin/
 
 RUN apk update \
  && apk add dhcp dhcp-doc perl dumb-init mdocml \
- && rm /usr/bin/qemu-arm-static
+ && rm /usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static
 
 COPY util/entrypoint.sh /entrypoint.sh
 

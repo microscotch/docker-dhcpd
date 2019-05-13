@@ -23,7 +23,13 @@ ls -l /usr/bin/docker
 which docker
 docker version
 
-curl https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf
+curl https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf -
+chmod -v 755 docker/docker
+cp docker/docker /usr/bin/docker
+ls -l /usr/bin/docker
+which docker
+docker version
+
 
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\

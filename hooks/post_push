@@ -10,8 +10,8 @@ which docker
 
 docker version
 cat << EOF > manifest.dockerfile
-FROM alpine:3.8
-RUN apk add docker bash
+FROM ubuntu:18.04
+RUN apt-get docker-ce
 EOF
 
 docker build -t manifest:1.0 -f manifest.dockerfile .
@@ -22,6 +22,8 @@ docker rm manifest
 ls -l /usr/bin/docker
 which docker
 docker version
+
+curl https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf
 
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\

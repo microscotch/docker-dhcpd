@@ -9,6 +9,9 @@ echo HOME=${HOME}
 
 [ -f ~/.docker/config.json ] && cat ~/.docker/config.json
 
+[ -f /etc/default/docker ] && cat /ett/default/docker
+
+
 env 
 
 cat << EOF > /etc/docker/daemon.json

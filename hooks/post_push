@@ -1,0 +1,22 @@
+#!/bin/bash -x
+mkdir -p ~/.docker
+cat << EOF > ~/.docker/config.json
+{
+    "experimental": "enabled"
+}
+EOF
+
+docker version
+
+docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
+docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
+docker manifest inspect ${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} &&\
+docker manifest create ${DOCKER_REPO}:${DOCKER_TAG#*-} \
+${DOCKER_REPO}:i386-${DOCKER_TAG#*-} \
+${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} \
+${DOCKER_REPO}:x86_64${DOCKER_TAG#*-} && \
+docker manifest annotate --arch 386 ${DOCKER_REPO}:${DOCKER_TAG#*-} \
+  ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
+docker manifest annotate --arch arm ${DOCKER_REPO}:${DOCKER_TAG#*-} \
+  ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
+docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-}

@@ -9,6 +9,18 @@ EOF
 which docker
 
 docker version
+cat << EOF > manifest.dockerfile
+FROM alpine
+RUN apk add docker bash
+EOF
+
+docker build -t manifest:1.0 -f manifest.dockerfile .
+docker create --rm -name manifest manifest:1.0
+docker cp manifest:/usr/bin/docker /usr/bin/docker
+docker rm manifest
+
+which docker
+docker version
 
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\

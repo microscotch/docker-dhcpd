@@ -9,7 +9,7 @@ echo HOME=${HOME}
 
 [ -f ~/.docker/config.json ] && cat ~/.docker/config.json
 
-[ -f /etc/default/docker ] && cat /ett/default/docker
+[ -f /etc/default/docker ] && cat /etc/default/docker
 
 
 env 

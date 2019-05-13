@@ -1,5 +1,11 @@
 #!/bin/bash -x
+service docker status && echo OK || echo KO
 docker info
+
+docker ps --no-trunc
+
+ps -eaf
+
 echo HOME=${HOME}
 [ -d /etc/docker ] && ls -l /etc/docker
 
@@ -9,7 +15,14 @@ echo HOME=${HOME}
 
 [ -f ~/.docker/config.json ] && cat ~/.docker/config.json
 
-[ -f /etc/default/docker ] && cat /etc/default/docker
+cat << EOF > /etc/default/docker
+DOCKER_OPTS="--experimental"
+EOF
+
+[ -f /etc/default/docker ] && { 
+    ls -l /etc/default/docker
+    cat /etc/default/docker
+}
 
 
 env 

@@ -6,30 +6,9 @@ cat << EOF > ~/.docker/config.json
 }
 EOF
 
-which docker
-
-docker version
-cat << EOF > manifest.dockerfile
-FROM ubuntu:18.04
-RUN apt-get docker-ce
-EOF
-
-docker build -t manifest:1.0 -f manifest.dockerfile .
-docker run -t --rm --name manifest manifest:1.0 ls -l /usr/bin/docker
-docker create --rm --name manifest manifest:1.0
-docker cp -a manifest:/usr/bin/docker /usr/bin/docker
-docker rm manifest
-ls -l /usr/bin/docker
-which docker
-docker version
-
 curl https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf -
 chmod -v 755 docker/docker
 cp docker/docker /usr/bin/docker
-ls -l /usr/bin/docker
-which docker
-docker version
-
 
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
@@ -37,9 +16,11 @@ docker manifest inspect ${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} &&\
 docker manifest create ${DOCKER_REPO}:${DOCKER_TAG#*-} \
 ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} \
 ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} \
-${DOCKER_REPO}:x86_64${DOCKER_TAG#*-} && \
+${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} && \
 docker manifest annotate --arch 386 ${DOCKER_REPO}:${DOCKER_TAG#*-} \
   ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest annotate --arch arm ${DOCKER_REPO}:${DOCKER_TAG#*-} \
   ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
 docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-}
+
+true

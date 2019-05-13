@@ -6,6 +6,8 @@ cat << EOF > ~/.docker/config.json
 }
 EOF
 
+which docker
+
 docker version
 
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\

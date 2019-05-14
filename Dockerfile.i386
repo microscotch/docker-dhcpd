@@ -2,6 +2,9 @@ FROM i386/alpine:3.9 as builder
 
 ARG QEMU_USER_STATIC_ARCH
 
+LABEL org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.vcs-url="https://github.com/microscotch/docker-dhcpd"
+
 COPY qemu-${QEMU_USER_STATIC_ARCH}-static /usr/bin/
 
 RUN apk update \

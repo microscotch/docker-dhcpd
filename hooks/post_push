@@ -1,4 +1,8 @@
 #!/bin/bash
+if [[  ${DOCKER_TAG#*-} != latest ]]; then
+  docker tag ${DOCKER_REPO}:${DOCKER_TAG} ${DOCKER_REPO}:${DOCKER_TAG%-*}-latest
+  docker push ${DOCKER_REPO}:${DOCKER_TAG%-*}-latest
+fi
 
 # Create config for docker client ce
 mkdir -p ~/.docker
@@ -34,7 +38,7 @@ docker manifest inspect ${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO#*/}:x86_64-${DOCKER_TAG#*-} &&\
 #
-# create fat manifest
+# create manifest list 
 docker manifest create ${DOCKER_REPO}:${DOCKER_TAG#*-} \
 ${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} \
 ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} \
@@ -46,8 +50,25 @@ docker manifest annotate --arch 386 ${DOCKER_REPO}:${DOCKER_TAG#*-} \
 docker manifest annotate --arch arm ${DOCKER_REPO}:${DOCKER_TAG#*-} \
   ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} &&\
 #
-# push fat manifest to registry
-docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-}
+# push manifest list to registry
+docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-} &&\
+# Create latest manifest list if needed
+if [[  ${DOCKER_TAG#*-} != latest ]]; then
+    # create manifest list
+    docker manifest create ${DOCKER_REPO}:latest \
+    ${DOCKER_REPO#*/}:i386-${DOCKER_TAG%-*}-latest \
+    ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG%-*}-latest \
+    ${DOCKER_REPO#*/}:x86_64-${DOCKER_TAG%-*}-latest && \
+    #
+    # update arch as everything has been built on x86_64
+    docker manifest annotate --arch 386 ${DOCKER_REPO}:latest \
+      ${DOCKER_REPO#*/}:i386-${DOCKER_TAG%-*}-latest &&\
+    docker manifest annotate --arch arm ${DOCKER_REPO}:latest \
+      ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG%-*}-latest &&\
+    #
+    # push manifest list to registry
+    docker manifest push ${DOCKER_REPO}:latest &&\
+fi
 
 # Perform cleanup
 #

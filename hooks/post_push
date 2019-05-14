@@ -1,5 +1,6 @@
-#!/bin/bash -x
-which jq
+#!/bin/bash
+
+# Create config for docker client ce
 mkdir -p ~/.docker
 cat << EOF > ~/.docker/config.json
 {
@@ -8,21 +9,50 @@ cat << EOF > ~/.docker/config.json
 }
 EOF
 
-curl https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf -
-chmod -v 755 docker/docker
-cp docker/docker /usr/bin/docker
-
+# replace docker client ee by docker client ce static
+# in order to have docker manifest command
+#
+curl -sfL https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xzvf - &&\
+#
+# backup docker client ee
+mv -v /usr/bin/docker{,.bkp} &&\
+#
+# update right if needed
+chmod -v 755 docker/docker &&\
+#
+# replace docker client ee with docker client ce static
+mv -v docker/docker /usr/bin/docker &&\
+#
+# cleanup
+rm -rv docker/docker && \
+#
+# check conf
+docker info &&\
+#
+# check all manifets exists
 docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
 docker manifest inspect ${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} &&\
+#
+# create fat manifest
 docker manifest create ${DOCKER_REPO}:${DOCKER_TAG#*-} \
 ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} \
 ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} \
 ${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} && \
+#
+# update arch as everything has been built on x86_64
 docker manifest annotate --arch 386 ${DOCKER_REPO}:${DOCKER_TAG#*-} \
   ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
 docker manifest annotate --arch arm ${DOCKER_REPO}:${DOCKER_TAG#*-} \
   ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
+#
+# push fat manifest to registry
 docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-}
 
-true
+# Perform cleanup
+#
+# Restore docker client
+[ -f /usr/bin/docker.bkp ] && mv -v /usr/bin/docker{.bkp,} || true
+#
+# Remove docker client config
+[ -f ~/.docker/docker.cfg ] && rm -v ~/.docker/docker.cfg || true

@@ -12,4 +12,5 @@ docker build \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
     --build-arg QEMU_USER_STATIC_ARCH="${QEMU_USER_STATIC_ARCH}" \
     --tag "$IMAGE_NAME" \
-.
+
+docker run --rm -t "$IMAGE_NAME" ls -l /usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static || true

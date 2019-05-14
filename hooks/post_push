@@ -24,7 +24,7 @@ chmod -v 755 docker/docker &&\
 mv -v docker/docker /usr/bin/docker &&\
 #
 # cleanup
-rm -rv docker/docker && \
+rm -rv docker && \
 #
 # check conf
 docker info &&\

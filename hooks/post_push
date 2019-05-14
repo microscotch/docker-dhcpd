@@ -1,13 +1,5 @@
 #!/bin/bash
 
-docker create --rm "${IMAGE_NAME}" -name test-${DOCKER_TAG} && {
-    docker cp test-${DOCKER_TAG}:/usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static - >/dev/null && {
-        echo "qemu binary found in image while it should not"
-        docker rm test-${DOCKER_TAG}
-        exit 1
-    } 
-} || docker rm test-${DOCKER_TAG} || true
-
 if [[  ${DOCKER_TAG#*-} != latest ]]; then
   docker tag ${IMAGE_NAME} ${DOCKER_REPO}:${DOCKER_TAG%-*}-latest
   docker push ${DOCKER_REPO}:${DOCKER_TAG%-*}-latest

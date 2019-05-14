@@ -14,7 +14,7 @@ docker build \
     --tag "$IMAGE_NAME" \
     .
 
-docker create --rm "${IMAGE_NAME}" -name test-${DOCKER_TAG} && {
+docker create --rm "${IMAGE_NAME}" --name test-${DOCKER_TAG} && {
     docker cp test-${DOCKER_TAG}:/usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static - >/dev/null && {
         echo "qemu binary found in image while it should not"
         docker rm test-${DOCKER_TAG}

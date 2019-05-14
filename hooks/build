@@ -11,13 +11,13 @@ docker build \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
     --build-arg QEMU_USER_STATIC_ARCH="${QEMU_USER_STATIC_ARCH}" \
-    --tag "$IMAGE_NAME" \
+    --tag "${IMAGE_NAME}" \
     .
 
-docker create --rm "${IMAGE_NAME}" --name test-${DOCKER_TAG} && {
-    docker cp test-${DOCKER_TAG}:/usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static - >/dev/null && {
+docker create --rm --name "test-${DOCKER_TAG}"  "${IMAGE_NAME}" && {
+    docker cp "test-${DOCKER_TAG}":/usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static - >/dev/null && {
         echo "qemu binary found in image while it should not"
-        docker rm test-${DOCKER_TAG}
+        docker rm "test-${DOCKER_TAG}"
         exit 1
     } 
-} || docker rm test-${DOCKER_TAG} || true
+} || docker rm "test-${DOCKER_TAG"} || true

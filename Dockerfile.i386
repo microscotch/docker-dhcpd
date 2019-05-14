@@ -1,4 +1,4 @@
-FROM i386/alpine:3.9
+FROM i386/alpine:3.9 as builder
 
 ARG QEMU_USER_STATIC_ARCH
 
@@ -9,5 +9,9 @@ RUN apk update \
  && rm /usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static
 
 COPY util/entrypoint.sh /entrypoint.sh
+
+FROM scratch
+
+COPY --from=builder / /
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -30,21 +30,21 @@ rm -rv docker/docker && \
 docker info &&\
 #
 # check all manifets exists
-docker manifest inspect ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
-docker manifest inspect ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
-docker manifest inspect ${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} &&\
+docker manifest inspect ${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} &&\
+docker manifest inspect ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} &&\
+docker manifest inspect ${DOCKER_REPO#*/}:x86_64-${DOCKER_TAG#*-} &&\
 #
 # create fat manifest
 docker manifest create ${DOCKER_REPO}:${DOCKER_TAG#*-} \
-${DOCKER_REPO}:i386-${DOCKER_TAG#*-} \
-${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} \
-${DOCKER_REPO}:x86_64-${DOCKER_TAG#*-} && \
+${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} \
+${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} \
+${DOCKER_REPO#*/}:x86_64-${DOCKER_TAG#*-} && \
 #
 # update arch as everything has been built on x86_64
 docker manifest annotate --arch 386 ${DOCKER_REPO}:${DOCKER_TAG#*-} \
-  ${DOCKER_REPO}:i386-${DOCKER_TAG#*-} &&\
+  ${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} &&\
 docker manifest annotate --arch arm ${DOCKER_REPO}:${DOCKER_TAG#*-} \
-  ${DOCKER_REPO}:armv7-${DOCKER_TAG#*-} &&\
+  ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG#*-} &&\
 #
 # push fat manifest to registry
 docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-}

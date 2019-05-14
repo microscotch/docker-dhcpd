@@ -67,7 +67,7 @@ if [[  ${DOCKER_TAG#*-} != latest ]]; then
       ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG%-*}-latest &&\
     #
     # push manifest list to registry
-    docker manifest push ${DOCKER_REPO}:latest &&\
+    docker manifest push ${DOCKER_REPO}:latest
 fi
 
 # Perform cleanup

@@ -32,7 +32,7 @@ mv -v docker/docker /usr/bin/docker &&\
 rm -rv docker && \
 #
 # check conf
-docker info &&\
+docker version &&\
 #
 # check all manifets exists
 docker manifest inspect ${DOCKER_REPO#*/}:i386-${DOCKER_TAG#*-} &&\

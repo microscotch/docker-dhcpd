@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 BUILD_ARCH=$(echo "${DOCKERFILE_PATH}" | cut -d '.' -f 2)
 
@@ -11,6 +11,12 @@ docker build \
     --build-arg BUILD_DATE="$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
     --build-arg VCS_REF="$(git rev-parse --short HEAD)" \
     --build-arg QEMU_USER_STATIC_ARCH="${QEMU_USER_STATIC_ARCH}" \
-    --tag "$IMAGE_NAME" \
+    --tag "$IMAGE_NAME"
 
-docker run --rm -t "$IMAGE_NAME" ls -l /usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static || true
+docker create --rm "$IMAGE_NAME" -name test-${DOCKER_TAG} && {
+    docker cp test-${DOCKER_TAG}:/usr/bin/qemu-${QEMU_USER_STATIC_ARCH}-static - >/dev/null && {
+        echo "qemu binary found in image while it should not"
+        docker rm test-${DOCKER_TAG}
+        exit 1
+    } 
+} || docker rm test-${DOCKER_TAG} || true

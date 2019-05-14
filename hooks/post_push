@@ -56,15 +56,15 @@ docker manifest push ${DOCKER_REPO}:${DOCKER_TAG#*-} &&\
 if [[  ${DOCKER_TAG#*-} != latest ]]; then
     # create manifest list
     docker manifest create ${DOCKER_REPO}:latest \
-    ${DOCKER_REPO#*/}:i386-${DOCKER_TAG%-*}-latest \
-    ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG%-*}-latest \
-    ${DOCKER_REPO#*/}:x86_64-${DOCKER_TAG%-*}-latest && \
+    ${DOCKER_REPO#*/}:i386-latest \
+    ${DOCKER_REPO#*/}:armv7-latest \
+    ${DOCKER_REPO#*/}:x86_64-latest && \
     #
     # update arch as everything has been built on x86_64
     docker manifest annotate --arch 386 ${DOCKER_REPO}:latest \
-      ${DOCKER_REPO#*/}:i386-${DOCKER_TAG%-*}-latest &&\
+      ${DOCKER_REPO#*/}:i386-latest &&\
     docker manifest annotate --arch arm ${DOCKER_REPO}:latest \
-      ${DOCKER_REPO#*/}:armv7-${DOCKER_TAG%-*}-latest &&\
+      ${DOCKER_REPO#*/}:armv7-latest &&\
     #
     # push manifest list to registry
     docker manifest push ${DOCKER_REPO}:latest

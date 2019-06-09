@@ -1,4 +1,4 @@
-Docker image for ISC DHCP server
+Multi arch docker image for ISC DHCP server
 ================================
 
 [![](https://images.microbadger.com/badges/image/microscotch/dhcpd-alpine.svg)](https://microbadger.com/images/microscotch/dhcpd-alpine "See more microscotch/dhcpd-alpine image details")
@@ -6,12 +6,6 @@ Docker image for ISC DHCP server
 
 This Docker image is suitable for running a DHCP server for your docker host
 network.  It uses ISC DHCP server which is bundled with the alpine distribution.
-
-How to build
-============
-
- 1. Install Docker with the instructions on <https://www.docker.com>.
- 2. Run `./build` to create the local docker image `microscotch/dhcpd-alpine`.
 
 How to use
 ==========
@@ -48,6 +42,15 @@ warning will be emitted informing you that you've probably forgotten it.
 If a `/data` volume is not provided with a `dhcpd.conf` inside it, the
 container will exit early with an error message.
 
+How to build
+============
+
+## Manual way
+
+ 1. Install Docker with the instructions on <https://www.docker.com>.
+ 2. Run `./build` to create the local docker image `microscotch/dhcpd-alpine`.
+ 3. In order to build arm or i386 image you have to register qemu
+
 Acknowledgements
 ================
 
@@ -63,6 +66,7 @@ Copyright & License
 ===================
 
 This project is copyright 2019 Microscotch <github.com@microscotch.net>
+and Copyright 2017 Robin Smidsrød <robin@smidsrod.no>
 
 It is licensed under the Apache 2.0 license.
 

@@ -4,6 +4,8 @@ Docker image for ISC DHCP server
 [![](https://images.microbadger.com/badges/image/microscotch/dhcpd-alpine.svg)](https://microbadger.com/images/microscotch/dhcpd-alpine "See more microscotch/dhcpd-alpine image details")
 [![](https://images.microbadger.com/badges/version/microscotch/dhcpd-alpine.svg)](https://microbadger.com/images/microscotch/dhcpd-alpine "Get your own version badge on microbadger.com")
 
+[![](https://img.shields.io/docker/pulls/microscotch/dhcpd-alpine.svg)](https://hub.docker.com/r/microscotch/dhcpd-alpine)
+
 This Docker image is suitable for running a DHCP server for your docker host
 network.  It uses ISC DHCP server which is bundled with the alpine distribution.
 
